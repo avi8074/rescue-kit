@@ -1,6 +1,6 @@
-import { ArrowRightIcon, DownloadIcon } from 'lucide-react';
-import React from 'react';
-import { motion } from 'motion/react';
+import { ArrowRightIcon, DownloadIcon, MenuIcon, XIcon, ArrowUpIcon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 function FadeIn({ children, delay = 0, className = "", style = {} }: { children: React.ReactNode, delay?: number, className?: string, style?: React.CSSProperties }) {
   return (
@@ -18,6 +18,33 @@ function FadeIn({ children, delay = 0, className = "", style = {} }: { children:
 }
 
 export default function App() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setShowScrollTop(window.scrollY > 600);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
+
   return (
     <>
       <nav>
@@ -25,8 +52,48 @@ export default function App() {
         <div className="nav-cta">
           <span className="nav-price">$37</span>
           <a href="#pricing" className="btn-nav">GET THE KIT</a>
+          <button
+            className="nav-hamburger"
+            aria-label="Toggle menu"
+            onClick={() => setMobileMenuOpen(o => !o)}
+          >
+            {mobileMenuOpen ? <XIcon size={22} /> : <MenuIcon size={22} />}
+          </button>
         </div>
       </nav>
+
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="mobile-menu"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.2 }}
+          >
+            <a href="#pricing" className="mobile-menu-link" onClick={() => setMobileMenuOpen(false)}>Get the Kit — $37</a>
+            <a href="#pricing" className="btn-primary mobile-menu-btn" onClick={() => setMobileMenuOpen(false)}>
+              <DownloadIcon size={16} style={{ marginRight: '8px' }} /> Buy Now
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            className="scroll-top-btn"
+            aria-label="Back to top"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            <ArrowUpIcon size={18} />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       <main>
         <section className="hero" style={{ backgroundImage: "none", background: "#050505" }}>
@@ -127,7 +194,7 @@ export default function App() {
           <div className="types-grid">
             <FadeIn delay={0.1}>
               <div className="type-card" data-letter="A">
-                <img src="/type-a.png" alt="Type A: The Hoodie Effect" className="type-card-img" />
+                <img src="/type-a.svg" alt="Type A: The Hoodie Effect" className="type-card-img" />
                 <div className="type-tag">TYPE A</div>
                 <h3>The Hoodie Effect</h3>
                 <p className="type-quote">"Fine in clothes, soft underneath"</p>
@@ -141,7 +208,7 @@ export default function App() {
             </FadeIn>
             <FadeIn delay={0.2}>
               <div className="type-card" data-letter="B">
-                <img src="/type-b.png" alt="Type B: Macro Prison" className="type-card-img" />
+                <img src="/type-b.svg" alt="Type B: Macro Prison" className="type-card-img" />
                 <div className="type-tag">TYPE B</div>
                 <h3>Macro Prison</h3>
                 <p className="type-quote">"Terrified of eating more"</p>
@@ -155,7 +222,7 @@ export default function App() {
             </FadeIn>
             <FadeIn delay={0.3}>
               <div className="type-card" data-letter="C">
-                <img src="/type-c.png" alt="Type C: The Dating Tax" className="type-card-img" />
+                <img src="/type-c.svg" alt="Type C: The Dating Tax" className="type-card-img" />
                 <div className="type-tag">TYPE C</div>
                 <h3>The Dating Tax</h3>
                 <p className="type-quote">"Dates go quiet after"</p>
@@ -169,7 +236,7 @@ export default function App() {
             </FadeIn>
             <FadeIn delay={0.4}>
               <div className="type-card" data-letter="D">
-                <img src="/type-d.png" alt="Type D: The 2am Mirror" className="type-card-img" />
+                <img src="/type-d.svg" alt="Type D: The 2am Mirror" className="type-card-img" />
                 <div className="type-tag">TYPE D</div>
                 <h3>The 2am Mirror</h3>
                 <p className="type-quote">"Who could want this?"</p>

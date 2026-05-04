@@ -9,7 +9,7 @@
   --gold-light: #E2B97C;
   --text:       #EDEDED;
   --text-muted: #888888;
-  --f-serif:    'Georgia', serif;
+  --f-serif:    'Playfair Display', Georgia, serif;
   --f-sans:     'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   --gold-dim:   #7a5c30;
@@ -92,6 +92,74 @@ nav {
   white-space: nowrap;
 }
 .btn-nav:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 0;
+}
+@media (max-width: 600px) {
+  .nav-hamburger { display: flex; align-items: center; }
+  .nav-cta .btn-nav { display: none; }
+  .nav-price { display: none; }
+}
+
+/* ── MOBILE MENU ─────────────────────────────────────────────────────────── */
+.mobile-menu {
+  position: fixed;
+  top: 72px;
+  left: 0; right: 0;
+  background: rgba(8,8,8,0.97);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 190;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 28px 24px;
+}
+.mobile-menu-link {
+  color: var(--text-soft);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.mobile-menu-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ── SCROLL TO TOP ───────────────────────────────────────────────────────── */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 300;
+  background: var(--gold);
+  color: #080808;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(201,151,90,0.3);
+  transition: background 0.15s, transform 0.15s;
+}
+.scroll-top-btn:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+}
 
 /* ── HERO ──────────────────────────────────────────────────────────────────── */
 .hero {
